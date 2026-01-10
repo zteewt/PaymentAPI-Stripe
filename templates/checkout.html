@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ item.name }}</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <section>
+        <div class="product">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <h5>{{ item.get_price_in_dollars }}</h5>
+        </div>
+        <button id="checkout-button">Checkout</button>
+    </section>
+
+    <script>
+        var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+        var checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.onclick = function() {
+            fetch('/buy/{{ item.pk }}/', {method: 'GET'})
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(session) {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        };
+    </script>
+</body>
+</html>
