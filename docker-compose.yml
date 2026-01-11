@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=paymentapi_stripe.settings
+    volumes:
+      - ./:/app
+      - ./data:/app/data
+    command: >
+      sh -c "mkdir -p /app/data &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  sqlite_data:

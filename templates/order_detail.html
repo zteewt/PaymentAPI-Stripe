@@ -1,0 +1,40 @@
+<h1>Заказ #{{ order.pk }} — ${{ order.get_total_amount|floatformat:2 }}</h1>
+
+<table>
+{% for oi in order.order_items.all %}
+<tr>
+  <td>{{ oi.item.name }}</td>
+  <td>{{ oi.quantity }} × ${{ oi.template_price_in_dollars|floatformat:2 }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<button id="checkout-list">Оплатить {{ order.get_total_amount }}</button>
+
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+    var checkoutButton = document.getElementById('checkout-list');
+    
+    checkoutButton.addEventListener('click', function() {
+        fetch('/order/{{ order.pk }}/buy/', {
+            method: 'GET'
+        })
+        .then(function(response) {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Server error: ${response.status} ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(function(session) {
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            alert('Ошибка оплаты: ' + error.message);
+        });
+    });
+</script>
