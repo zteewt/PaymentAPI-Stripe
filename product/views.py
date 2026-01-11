@@ -48,7 +48,7 @@ class CreateCheckoutSessionView(View):
     def get(self, request, pk):
         stripe.api_key = settings.STRIPE_SECRET_KEY 
         item = get_object_or_404(Item, pk=pk)
-        DOMAIN = 'http://127.0.0.1:8000'
+        DOMAIN = settings.SITE_URL
 
         max_discount =  item.discount.order_by('-percentage').first()
         discount_id = [{"coupon": max_discount.stripe_coupon_id}] if max_discount else []
@@ -70,8 +70,8 @@ class CreateCheckoutSessionView(View):
                 "quantity": 1,
             }],
             mode="payment",
-            success_url=DOMAIN + '/success/',
-            cancel_url=DOMAIN + '/cancel/',
+            success_url=f"{DOMAIN}/success/",
+            cancel_url=f"{DOMAIN}/cancel/",
             discounts=discount_id,
         )
         return JsonResponse({"id": checkout_session.id})

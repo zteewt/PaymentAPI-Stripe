@@ -13,9 +13,9 @@ class OrderItemsAdmin(admin.ModelAdmin):
     search_fields = ('item', )
 
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ['id', 'status', 'created_at']
+    list_display = ['id', 'created_at']
     list_display_links = ('id', )
-    search_fields = ('id', 'status')
+    search_fields = ('id', )
 
 
 class DiscountsAdmin(admin.ModelAdmin):
