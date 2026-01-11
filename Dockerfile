@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 
-CMD ["bash", "-lc", "python manage.py migrate && python manage.py runserver 0.0.0.0:${PORT:-8000}"]
+CMD ["bash", "-lc", "mkdir -p /app/data && python manage.py migrate && python manage.py runserver 0.0.0.0:${PORT:-8000}"]
