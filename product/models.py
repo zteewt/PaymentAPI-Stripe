@@ -38,7 +38,6 @@ class Item(models.Model):
 
 class Order(models.Model):
     created_at = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=20)
     discount = models.ManyToManyField(Discount, blank=True)
     tax = models.ManyToManyField(Tax, blank=True)
 
