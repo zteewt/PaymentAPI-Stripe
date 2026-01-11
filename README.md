@@ -72,7 +72,28 @@ curl -i https://paymentapi-pha1.onrender.com/order/1/buy/
  - `stripe_coupon_id = UAarRL5G`
  - `stripe_tax_rate_id = txr_1SoN9c0tjgAS5veOwkhkHVtd`
 
-Если нужно поднять проект локально из репозитория:
+## (Опционально) Локальный запуск (Docker) + `.env`
+
+Проект использует конфигурацию через переменные окружения (env vars), а для локальной разработки удобно хранить их в файле `.env`. [web:809][web:810]
+
+### 1) Создать `.env`
+В корне проекта (рядом с `docker-compose.yml`) создай файл `.env`:
+
+```env
+# Django
+SECRET_KEY=change-me
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+CSRF_TRUSTED_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
+
+# Stripe (test mode)
+STRIPE_PUBLIC_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+
+# (Опционально) URL сайта — нужен для формирования success/cancel URL
+SITE_URL=http://127.0.0.1:8000
+```
+## Docker compose
 
 ```bash
 docker compose up --build
