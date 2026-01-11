@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--rgi6(+66dw#@my%w*zf31fb9q&esn%=pz03z93b+ie0k7gnh3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
 
 # Application definition
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'paymentapi_stripe.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "data" / 'db.sqlite3',
+        "NAME": config("SQLITE_PATH", default=str(BASE_DIR / "data" / "db.sqlite3")),
     }
 }
 
@@ -119,8 +119,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=True, cast=bool)
+SECRET_KEY = config("SECRET_KEY", default="dev-secret-key")
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
