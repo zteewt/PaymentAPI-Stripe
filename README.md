@@ -12,8 +12,8 @@
 
 Данные создаются через Django admin:
 - Admin: https://paymentapi-pha1.onrender.com/admin/
-- Login: `<admin_login>`
-- Password: `<admin_password>`
+- Login: `admin`
+- Password: `notapassword`
 
 Через админку можно создать/отредактировать:
 - `Items`
